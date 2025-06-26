@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Anniversary, My Love!</title>
+    <style>
+        /* --- Google Fonts --- */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@300;400&display=swap');
+
+        /* --- CSS Variables for Easy Customization --- */
+        :root {
+            --bg-color: #1a1a1a;
+            --text-color: #f0f0f0;
+            --primary-color: #e91e63; /* A vibrant pink/red */
+            --secondary-color: #ff80ab; /* A softer pink */
+            --white-color: #ffffff;
+            --heart-color-red: #c0392b;
+            --heart-color-pink: #ff80ab;
+            --heart-color-white: #fdfdfd;
+            --timeline-line-color: #555;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Lato', sans-serif;
+        }
+
+        /* --- Basic Reset and Body Styles --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        /* --- Falling Hearts Animation --- */
+        #particle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .heart-particle {
+            position: absolute;
+            top: -10vh;
+            width: 25px; /* Slightly smaller for a more delicate feel */
+            height: 25px;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+
+        .heart-particle svg {
+            width: 100%;
+            height: 100%;
+            animation: spin 8s linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh);
+            }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* --- Hero Section with Heart --- */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-family: var(--font-heading);
+            font-size: 4rem;
+            color: var(--white-color);
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            margin-bottom: 2rem;
+        }
+
+        #interaction-heart-container {
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        #interaction-heart-container:hover {
+            transform: scale(1.1);
+        }
+
+        #interaction-heart {
+            width: 100px;
+            height: 100px;
+            fill: var(--primary-color);
+            animation: pulse 1.5s infinite;
+            filter: drop-shadow(0 0 15px var(--primary-color));
+        }
+        
+        #click-me {
+            color: var(--white-color);
+            margin-top: 1rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            animation: fadeInOut 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+        
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* --- Main Content Section (Initially Hidden) --- */
+        #main-content {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1.5s ease-in-out, transform 1s ease-in-out;
+            pointer-events: none;
+            padding: 5rem 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        #main-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        
+        .content-section {
+            background-color: rgba(0,0,0,0.3);
+            border-left: 4px solid var(--primary-color);
+            padding: 2rem;
+            margin-bottom: 4rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .content-section h2 {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .content-section p, .content-section li {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        .content-section p.signature {
+            margin-top: 2rem;
+            font-size: 1.2rem;
+            font-style: italic;
+        }
+
+        /* --- Photo Section --- */
+        .photo-container {
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            border: 3px solid var(--secondary-color);
+        }
+
+        .photo-container img {
+            width: 100%;
+            display: block;
+        }
+
+        /* --- Timeline Section --- */
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 15px;
+            height: 100%;
+            width: 3px;
+            background: var(--timeline-line-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 5px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--secondary-color);
+            border: 3px solid var(--bg-color);
+            z-index: 1;
+        }
+        
+        .timeline-item h3 {
+            font-family: var(--font-heading);
+            color: var(--white-color);
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- Reasons List --- */
+        .reasons-list {
+            list-style: none;
+        }
+
+        .reasons-list li {
+            padding-left: 1.5rem;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .reasons-list li::before {
+            content: '♥';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+        
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            #main-content {
+                padding: 3rem 1rem;
+            }
+            .content-section h2 {
+                font-size: 2rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- SVG definition for the falling heart particle -->
+    <svg width="0" height="0" style="position:absolute;z-index:-1;">
+      <defs>
+        <symbol id="heart-svg" viewBox="0 0 24 24">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </symbol>
+      </defs>
+    </svg>
+
+    <div id="particle-container"></div>
+
+    <div class="hero">
+        <!-- EDIT HERE: Change your wife's name -->
+        <h1>Happy Anniversary, [Wife's Name]!</h1>
+        <div id="interaction-heart-container">
+            <svg id="interaction-heart" viewBox="0 0 24 24">
+                <use xlink:href="#heart-svg"></use> <!-- Reusing the heart symbol -->
+            </svg>
+            <div id="click-me">Click My Heart</div>
+        </div>
+    </div>
+
+    <main id="main-content">
+        <section class="content-section">
+            <!-- EDIT HERE: Change the number of years -->
+            <h2>To my amazing wife, on our [Number]th anniversary</h2>
+            
+            <!-- EDIT HERE: Write your personal letter -->
+            <p>My Dearest [Wife's Name],</p>
+            <p>
+                It feels like just yesterday we started this journey, and yet here we are, celebrating another incredible year together. This page is just a small token to try and capture a fraction of the love and happiness you bring into my life every single day.
+                Looking back on our time together fills me with so much joy. Thank you for being my partner, my best friend, and my everything.
+            </p>
+            <p class="signature">
+                Forever and always,<br>
+                <!-- EDIT HERE: Your name -->
+                [Your Name]
+            </p>
+        </section>
+
+        <section class="content-section">
+            <h2>A Favorite Memory</h2>
+            <div class="photo-container">
+                <!-- EDIT HERE: Replace with a direct link to your photo -->
+                <img src="https://images.unsplash.com/photo-1542042161-d10f83769772?q=80&w=2070" alt="A lovely photo of us">
+            </div>
+            <p>This picture always makes me smile. I remember this day so clearly...</p>
+        </section>
+
+        <section class="content-section">
+            <h2>A Few Reasons I Love You</h2>
+            <ul class="reasons-list">
+                <!-- EDIT HERE: Add your own personal reasons -->
+                <li>I love the way you laugh and smile.</li>
+                <li>I love your kindness and compassion for others which is mostly to animals haha.</li>
+                <li>I love how you make our house feel like a home.</li>
+                <li>I love your strength and courage.</li>
+                <li>I love that I get to build this amazing life with you.</li>
+            </ul>
+        </section>
+        
+    </main>
+    
+    <footer>
+        I love you more than words can say.
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const particleContainer = document.getElementById('particle-container');
+            const heartInteractionContainer = document.getElementById('interaction-heart-container');
+            const mainContent = document.getElementById('main-content');
+            
+            const heartColors = ['var(--heart-color-red)', 'var(--heart-color-pink)', 'var(--heart-color-white)'];
+            const numberOfHearts = 60; // Increased for a fuller effect
+
+            // --- Create Falling Hearts ---
+            for (let i = 0; i < numberOfHearts; i++) {
+                const heartParticle = document.createElement('div');
+                heartParticle.classList.add('heart-particle');
+                
+                // Randomize properties
+                const size = Math.random() * 15 + 15; // size between 15px and 30px
+                const left = Math.random() * 100; // left position in %
+                const animDuration = Math.random() * 8 + 7; // duration between 7s and 15s
+                const animDelay = Math.random() * 5; // delay up to 5s
+                const color = heartColors[Math.floor(Math.random() * heartColors.length)];
+
+                heartParticle.style.width = `${size}px`;
+                heartParticle.style.height = `${size}px`;
+                heartParticle.style.left = `${left}vw`;
+                heartParticle.style.animationDuration = `${animDuration}s, 8s`;
+                heartParticle.style.animationDelay = `${animDelay}s, 0s`;
+                
+                // Add the SVG inside the particle div
+                heartParticle.innerHTML = `<svg style="fill:${color};"><use xlink:href="#heart-svg"></use></svg>`;
+                
+                particleContainer.appendChild(heartParticle);
+            }
+
+            // --- Heart Click Interaction ---
+            heartInteractionContainer.addEventListener('click', function() {
+                // Hide the hero text and heart
+                this.style.transition = 'transform 0.5s ease-out, opacity 0.5s ease-out';
+                this.style.transform = 'scale(20)'; // Explode effect
+                this.style.opacity = '0';
+                
+                document.querySelector('.hero h1').style.transition = 'opacity 0.5s';
+                document.querySelector('.hero h1').style.opacity = '0';
+                
+                document.getElementById('click-me').style.display = 'none';
+
+                // After the animation, show the main content
+                setTimeout(() => {
+                    this.style.display = 'none';
+                    mainContent.classList.add('visible');
+                    // Scroll to the content
+                    mainContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 500); // 500ms matches the transition duration
+            });
+            
+            // --- Interactive Mouse "Wind" Effect ---
+            document.addEventListener('mousemove', function(e) {
+                // Calculate mouse position from -1 (left) to 1 (right)
+                const x = (e.clientX / window.innerWidth) * 2 - 1;
+                // Apply a subtle horizontal translation to the entire particle container
+                particleContainer.style.transform = `translateX(${x * 30}px)`;
+            });
+
+        });
+    </script>
+
+</body>
+</html>
